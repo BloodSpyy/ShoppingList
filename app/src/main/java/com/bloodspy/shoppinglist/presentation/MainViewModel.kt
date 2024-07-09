@@ -1,7 +1,5 @@
 package com.bloodspy.shoppinglist.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bloodspy.shoppinglist.data.ShoppingListRepositoryImpl
 import com.bloodspy.shoppinglist.domain.DeleteShopItemUseCase
@@ -22,7 +20,7 @@ class MainViewModel: ViewModel() {
         deleteShopItemUseCase.deleteShopItem(shopItem)
     }
 
-    fun editShopItem(shopItem: ShopItem) {
+    fun changeEnableState(shopItem: ShopItem) {
         val newShopItem = shopItem.copy(isEnabled = !shopItem.isEnabled)
 
         editShopItemUseCase.editShopItem(newShopItem)
