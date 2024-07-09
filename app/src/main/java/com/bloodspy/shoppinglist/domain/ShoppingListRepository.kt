@@ -1,5 +1,7 @@
 package com.bloodspy.shoppinglist.domain
 
+import androidx.lifecycle.LiveData
+
 interface ShoppingListRepository {
     fun addShopItem(shopItem: ShopItem)
 
@@ -9,5 +11,5 @@ interface ShoppingListRepository {
 
     fun getShopItem(id: Int): ShopItem
 
-    fun getShopList(): List<ShopItem>
+    fun getShopList(): LiveData<List<ShopItem>>
 }
