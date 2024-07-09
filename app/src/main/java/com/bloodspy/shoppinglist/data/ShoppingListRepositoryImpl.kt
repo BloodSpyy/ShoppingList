@@ -7,21 +7,21 @@ import com.bloodspy.shoppinglist.domain.ShopItem.Companion.UNDEFINED_ID
 import com.bloodspy.shoppinglist.domain.ShoppingListRepository
 import java.util.NoSuchElementException
 
-object ShoppingListRepositoryImpl: ShoppingListRepository {
+object ShoppingListRepositoryImpl : ShoppingListRepository {
     private val shoppingListLD = MutableLiveData<List<ShopItem>>()
-    private val shoppingList = mutableListOf<ShopItem>()
+    private val shoppingList = sortedSetOf<ShopItem>({ o1, o2 -> o1.id.compareTo(o2.id) })
 
     private var autoIncrementId = 0
         get() = field++
 
     init {
-        for(i in 0..10) {
-            shoppingList.add(i, ShopItem("$i", i, true))
+        for (i in 0..10) {
+            addShopItem(ShopItem("$i", i, true))
         }
     }
 
     override fun addShopItem(shopItem: ShopItem) {
-        if(shopItem.id == UNDEFINED_ID) {
+        if (shopItem.id == UNDEFINED_ID) {
             shopItem.id = autoIncrementId
         }
 
