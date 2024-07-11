@@ -6,6 +6,7 @@ import com.bloodspy.shoppinglist.domain.ShopItem
 import com.bloodspy.shoppinglist.domain.ShopItem.Companion.UNDEFINED_ID
 import com.bloodspy.shoppinglist.domain.ShoppingListRepository
 import java.util.NoSuchElementException
+import kotlin.random.Random
 
 object ShoppingListRepositoryImpl : ShoppingListRepository {
     private val shoppingListLD = MutableLiveData<List<ShopItem>>()
@@ -15,7 +16,7 @@ object ShoppingListRepositoryImpl : ShoppingListRepository {
         get() = field++
 
     init {
-        for (i in 0..10) {
+        for (i in 0..1000) {
             addShopItem(ShopItem("$i", i, true))
         }
     }
