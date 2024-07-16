@@ -16,7 +16,7 @@ object ShoppingListRepositoryImpl : ShoppingListRepository {
         get() = field++
 
     init {
-        for (i in 0..1000) {
+        for (i in 0..10) {
             addShopItem(ShopItem("$i", i, true))
         }
     }

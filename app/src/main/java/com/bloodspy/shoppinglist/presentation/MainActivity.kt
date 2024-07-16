@@ -1,17 +1,20 @@
 package com.bloodspy.shoppinglist.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bloodspy.shoppinglist.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
+
     private lateinit var recyclerViewShoppingList: RecyclerView
     private lateinit var shoppingListAdapter: ShoppingListAdapter
+
+    private lateinit var buttonAddShopItem: FloatingActionButton
 
     companion object {
         private const val LOG_TAG = "MainActivity"
@@ -21,9 +24,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        initViews()
         setupRecyclerView()
         setupViewModel()
         observeViewModel()
+        setupOnClickListeners()
+    }
+
+    private fun setupOnClickListeners() {
+        buttonAddShopItem.setOnClickListener {
+            startActivity(ShopItemActivity.newIntentAddItem(this))
+        }
     }
 
     private fun setupRecyclerView() {
@@ -49,13 +60,17 @@ class MainActivity : AppCompatActivity() {
                 viewModel.changeEnableState(it)
             }
             onShopItemClickListener = {
-                Log.d(LOG_TAG, it.toString())
+                startActivity(ShopItemActivity.newIntentEditItem(this@MainActivity, it.id))
             }
         }
     }
 
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+    }
+
+    private fun initViews() {
+        buttonAddShopItem = findViewById(R.id.buttonAddShopItem)
     }
 
     private fun setupSwipeListener(recyclerViewShoppingList: RecyclerView) {
