@@ -15,10 +15,7 @@ import com.bloodspy.shoppinglist.R
 import com.bloodspy.shoppinglist.domain.ShopItem
 import com.google.android.material.textfield.TextInputLayout
 
-class ShopItemFragment(
-    private val screenMode: String = UNKNOWN_SCREEN_MODE,
-    private val shopItemId: Int = ShopItem.UNDEFINED_ID,
-) : Fragment() {
+class ShopItemFragment : Fragment() {
 
     private lateinit var textInputLayoutName: TextInputLayout
     private lateinit var textInputLayoutCount: TextInputLayout
@@ -30,36 +27,35 @@ class ShopItemFragment(
 
     private lateinit var viewModel: ShopItemViewModel
 
+    private var screenMode: String = UNKNOWN_SCREEN_MODE
+    private var shopItemId: Int = ShopItem.UNDEFINED_ID
+
     companion object {
-        private const val EXTRA_SCREEN_MODE = "extra_mode"
-        private const val EXTRA_MODE_ADD = "extra_add"
-        private const val EXTRA_MODE_EDIT = "extra_edit"
-        private const val EXTRA_SHOP_ITEM_ID = "extra_id"
+        private const val SCREEN_MODE = "screen_mode"
+        private const val MODE_ADD = "mode_add"
+        private const val MODE_EDIT = "mode_edit"
+        private const val SHOP_ITEM_ID = "shop_item_id"
 
         private const val UNKNOWN_SCREEN_MODE = ""
 
-        fun newInstanceAddItem(): ShopItemFragment = ShopItemFragment(EXTRA_MODE_ADD)
-
-        fun newInstanceEditItem(shopItemId: Int): ShopItemFragment = ShopItemFragment(
-            EXTRA_MODE_EDIT,
-            shopItemId
-        )
-
-        fun newIntentAddItem(context: Context): Intent {
-            val intent = Intent(context, ShopItemActivity::class.java)
-            intent.putExtra(EXTRA_SCREEN_MODE, EXTRA_MODE_ADD)
-
-            return intent
+        fun newInstanceAddItem(): ShopItemFragment = ShopItemFragment().apply {
+            arguments = Bundle().apply {
+                putString(SCREEN_MODE, MODE_ADD)
+            }
         }
 
-        fun newIntentEditItem(context: Context, shopItemId: Int): Intent {
-            val intent = Intent(context, ShopItemActivity::class.java)
-
-            intent.putExtra(EXTRA_SCREEN_MODE, EXTRA_MODE_EDIT)
-            intent.putExtra(EXTRA_SHOP_ITEM_ID, shopItemId)
-
-            return intent
+        fun newInstanceEditItem(shopItemId: Int): ShopItemFragment = ShopItemFragment().apply {
+            arguments = Bundle().apply {
+                putString(SCREEN_MODE, MODE_EDIT)
+                putInt(SHOP_ITEM_ID, shopItemId)
+            }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        parseParams()
     }
 
     override fun onCreateView(
@@ -71,17 +67,17 @@ class ShopItemFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        parseParams()
         initViews(view)
         initViewModel()
         observeViewModel()
         setupDoOnTextChanged()
 
         when (screenMode) {
-            EXTRA_MODE_ADD -> launchAddMode()
-            EXTRA_MODE_EDIT -> launchEditMode()
+            MODE_ADD -> launchAddMode()
+            MODE_EDIT -> launchEditMode()
         }
     }
+
 
     private fun launchAddMode() {
         buttonSaveShopItem.setOnClickListener {
@@ -160,12 +156,25 @@ class ShopItemFragment(
     }
 
     private fun parseParams() {
-        if (screenMode != EXTRA_MODE_ADD && screenMode != EXTRA_MODE_EDIT) {
-            throw RuntimeException("Unknown screen mode: $screenMode")
+        val args = requireArguments()
+
+        if (!args.containsKey(SCREEN_MODE)) {
+            throw RuntimeException("Param screen mode not found")
         }
 
-        if (screenMode == EXTRA_MODE_EDIT && shopItemId == ShopItem.UNDEFINED_ID) {
-            throw RuntimeException("Param shop item id not found")
+        val mode = args.getString(SCREEN_MODE).toString()
+        if (mode != MODE_ADD && mode != MODE_EDIT) {
+            throw RuntimeException("Unknown screen mode: $mode")
+        }
+
+        screenMode = mode
+
+        if (screenMode == MODE_EDIT) {
+            if (!args.containsKey(SHOP_ITEM_ID)) {
+                throw RuntimeException("Param shop item id not found")
+            }
+
+            shopItemId = requireArguments().getInt(SHOP_ITEM_ID)
         }
     }
 
