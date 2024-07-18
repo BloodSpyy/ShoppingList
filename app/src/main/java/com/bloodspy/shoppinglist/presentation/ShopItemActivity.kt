@@ -53,9 +53,11 @@ class ShopItemActivity : AppCompatActivity() {
             else -> throw RuntimeException("Unknown screen mode: $screenMode")
         }
 
-        supportFragmentManager.beginTransaction()
-            .add(R.id.shop_item_container, fragment)
-            .commit()
+        if(savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.shop_item_container, fragment)
+                .commit()
+        }
     }
 
     private fun parseIntent() {

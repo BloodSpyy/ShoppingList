@@ -2,6 +2,8 @@ package com.bloodspy.shoppinglist.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -16,8 +18,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var buttonAddShopItem: FloatingActionButton
 
+    private lateinit var orientation: String
+
+    private var shopItemContainer: FragmentContainerView? = null
+
     companion object {
         private const val LOG_TAG = "MainActivity"
+
+        private const val PORTRAIT_ORIENTATION = "portrait"
+        private const val LANDSCAPE_ORIENTATION = "landscape"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,16 +34,40 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initViews()
-        setupRecyclerView()
         setupViewModel()
         observeViewModel()
+        parseOrientation()
+        setupRecyclerView()
         setupOnClickListeners()
     }
 
     private fun setupOnClickListeners() {
-        buttonAddShopItem.setOnClickListener {
-            startActivity(ShopItemActivity.newIntentAddItem(this))
+        if(orientation == PORTRAIT_ORIENTATION) {
+            buttonAddShopItem.setOnClickListener {
+                startActivity(ShopItemActivity.newIntentAddItem(this))
+            }
         }
+        else {
+            buttonAddShopItem.setOnClickListener {
+                    launchFragment(ShopItemFragment.newInstanceAddItem())
+            }
+        }
+    }
+
+    private fun parseOrientation() {
+        orientation = if(shopItemContainer == null) {
+            PORTRAIT_ORIENTATION
+        } else {
+            LANDSCAPE_ORIENTATION
+        }
+    }
+
+    private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.shopItemContainer, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setupRecyclerView() {
@@ -59,9 +92,16 @@ class MainActivity : AppCompatActivity() {
             onShopItemLongClickListener = {
                 viewModel.changeEnableState(it)
             }
-            onShopItemClickListener = {
-                startActivity(ShopItemActivity.newIntentEditItem(this@MainActivity, it.id))
+            onShopItemClickListener = if(orientation == PORTRAIT_ORIENTATION) {
+                {
+                    startActivity(ShopItemActivity.newIntentEditItem(this@MainActivity, it.id))
+                }
+            } else {
+                {
+                        launchFragment(ShopItemFragment.newInstanceEditItem(it.id))
+                }
             }
+
         }
     }
 
@@ -71,6 +111,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViews() {
         buttonAddShopItem = findViewById(R.id.buttonAddShopItem)
+        shopItemContainer = findViewById(R.id.shopItemContainer)
     }
 
     private fun setupSwipeListener(recyclerViewShoppingList: RecyclerView) {
