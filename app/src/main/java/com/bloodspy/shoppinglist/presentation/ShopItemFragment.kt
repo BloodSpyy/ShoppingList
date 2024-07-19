@@ -1,8 +1,8 @@
 package com.bloodspy.shoppinglist.presentation
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +15,8 @@ import com.bloodspy.shoppinglist.R
 import com.bloodspy.shoppinglist.domain.ShopItem
 import com.google.android.material.textfield.TextInputLayout
 
-class ShopItemFragment : Fragment() {
+class ShopItemFragment() : Fragment() {
+    lateinit var onEndWorkListener: OnEndWorkListener
 
     private lateinit var textInputLayoutName: TextInputLayout
     private lateinit var textInputLayoutCount: TextInputLayout
@@ -38,6 +39,8 @@ class ShopItemFragment : Fragment() {
 
         private const val UNKNOWN_SCREEN_MODE = ""
 
+        private const val LOG_TAG = "ShopItemFragment"
+
         fun newInstanceAddItem(): ShopItemFragment = ShopItemFragment().apply {
             arguments = Bundle().apply {
                 putString(SCREEN_MODE, MODE_ADD)
@@ -52,7 +55,18 @@ class ShopItemFragment : Fragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        Log.d(LOG_TAG, "onAttach()")
+        super.onAttach(context)
+        if (context is OnEndWorkListener) {
+            onEndWorkListener = context
+        } else {
+            throw RuntimeException("Activity must implement OnEndWorkListener ")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(LOG_TAG, "onCreate()")
         super.onCreate(savedInstanceState)
 
         parseParams()
@@ -62,9 +76,13 @@ class ShopItemFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? = inflater.inflate(R.layout.fragment_shop_item, container, false)
+    ): View? {
+        Log.d(LOG_TAG, "onCreateView()")
+        return inflater.inflate(R.layout.fragment_shop_item, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d(LOG_TAG, "onViewCreated()")
         super.onViewCreated(view, savedInstanceState)
 
         initViews(view)
@@ -78,6 +96,14 @@ class ShopItemFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        Log.d(LOG_TAG, "onDestroyView()")
+        super.onDestroyView()
+    }
+
+    interface OnEndWorkListener {
+        fun onEndWork()
+    }
 
     private fun launchAddMode() {
         buttonSaveShopItem.setOnClickListener {
@@ -132,7 +158,7 @@ class ShopItemFragment : Fragment() {
         viewModel.shouldCloseScreen.observe(
             viewLifecycleOwner
         ) {
-            activity?.onBackPressedDispatcher?.onBackPressed()
+            onEndWorkListener.onEndWork()
         }
     }
 

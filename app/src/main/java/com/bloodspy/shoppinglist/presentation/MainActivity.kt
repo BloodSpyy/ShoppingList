@@ -1,6 +1,7 @@
 package com.bloodspy.shoppinglist.presentation
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
@@ -10,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bloodspy.shoppinglist.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
     private lateinit var viewModel: MainViewModel
 
     private lateinit var recyclerViewShoppingList: RecyclerView
@@ -140,5 +141,10 @@ class MainActivity : AppCompatActivity() {
         ) {
             shoppingListAdapter.submitList(it)
         }
+    }
+
+    override fun onEndWork() {
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
     }
 }

@@ -12,7 +12,7 @@ import com.bloodspy.shoppinglist.R
 import com.bloodspy.shoppinglist.domain.ShopItem
 import com.google.android.material.textfield.TextInputLayout
 
-class ShopItemActivity : AppCompatActivity() {
+class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
     private var screenMode = UNKNOWN_SCREEN_MODE
     private var shopItemId = ShopItem.UNDEFINED_ID
 
@@ -82,5 +82,9 @@ class ShopItemActivity : AppCompatActivity() {
                 shopItemId = getIntExtra(EXTRA_SHOP_ITEM_ID, ShopItem.UNDEFINED_ID)
             }
         }
+    }
+
+    override fun onEndWork() {
+        finish()
     }
 }
