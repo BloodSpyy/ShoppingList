@@ -1,4 +1,4 @@
-package com.bloodspy.shoppinglist.presentation
+package com.bloodspy.shoppinglist.presentation.adapters
 
 import android.view.View
 import android.widget.TextView

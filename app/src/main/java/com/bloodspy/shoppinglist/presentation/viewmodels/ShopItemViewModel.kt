@@ -1,13 +1,13 @@
-package com.bloodspy.shoppinglist.presentation
+package com.bloodspy.shoppinglist.presentation.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bloodspy.shoppinglist.data.ShoppingListRepositoryImpl
-import com.bloodspy.shoppinglist.domain.AddShopItemUseCase
-import com.bloodspy.shoppinglist.domain.EditShopItemUseCase
-import com.bloodspy.shoppinglist.domain.GetShopItemUseCase
-import com.bloodspy.shoppinglist.domain.ShopItem
+import com.bloodspy.shoppinglist.domain.usecases.AddShopItemUseCase
+import com.bloodspy.shoppinglist.domain.usecases.EditShopItemUseCase
+import com.bloodspy.shoppinglist.domain.usecases.GetShopItemUseCase
+import com.bloodspy.shoppinglist.domain.entity.ShopItem
 
 class ShopItemViewModel : ViewModel() {
     companion object {

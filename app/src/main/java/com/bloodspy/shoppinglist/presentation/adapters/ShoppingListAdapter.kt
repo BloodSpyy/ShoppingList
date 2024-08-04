@@ -1,10 +1,10 @@
-package com.bloodspy.shoppinglist.presentation
+package com.bloodspy.shoppinglist.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.bloodspy.shoppinglist.R
-import com.bloodspy.shoppinglist.domain.ShopItem
+import com.bloodspy.shoppinglist.domain.entity.ShopItem
 
 class ShoppingListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(
     ShopItemDiffCallback()

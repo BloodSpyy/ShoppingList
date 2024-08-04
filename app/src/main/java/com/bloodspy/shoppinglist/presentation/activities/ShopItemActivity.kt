@@ -1,16 +1,12 @@
-package com.bloodspy.shoppinglist.presentation
+package com.bloodspy.shoppinglist.presentation.activities
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModelProvider
 import com.bloodspy.shoppinglist.R
-import com.bloodspy.shoppinglist.domain.ShopItem
-import com.google.android.material.textfield.TextInputLayout
+import com.bloodspy.shoppinglist.domain.entity.ShopItem
+import com.bloodspy.shoppinglist.presentation.fragments.ShopItemFragment
 
 class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
     private var screenMode = UNKNOWN_SCREEN_MODE

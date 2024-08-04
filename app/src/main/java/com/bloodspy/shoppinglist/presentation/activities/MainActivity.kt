@@ -1,4 +1,4 @@
-package com.bloodspy.shoppinglist.presentation
+package com.bloodspy.shoppinglist.presentation.activities
 
 import android.os.Bundle
 import android.widget.Toast
@@ -9,6 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bloodspy.shoppinglist.R
+import com.bloodspy.shoppinglist.presentation.viewmodels.MainViewModel
+import com.bloodspy.shoppinglist.presentation.fragments.ShopItemFragment
+import com.bloodspy.shoppinglist.presentation.adapters.ShoppingListAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {

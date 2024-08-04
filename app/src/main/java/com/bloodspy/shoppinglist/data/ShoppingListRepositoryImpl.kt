@@ -2,11 +2,10 @@ package com.bloodspy.shoppinglist.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bloodspy.shoppinglist.domain.ShopItem
-import com.bloodspy.shoppinglist.domain.ShopItem.Companion.UNDEFINED_ID
-import com.bloodspy.shoppinglist.domain.ShoppingListRepository
+import com.bloodspy.shoppinglist.domain.entity.ShopItem
+import com.bloodspy.shoppinglist.domain.entity.ShopItem.Companion.UNDEFINED_ID
+import com.bloodspy.shoppinglist.domain.repository.ShoppingListRepository
 import java.util.NoSuchElementException
-import kotlin.random.Random
 
 object ShoppingListRepositoryImpl : ShoppingListRepository {
     private val shoppingListLD = MutableLiveData<List<ShopItem>>()
