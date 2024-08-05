@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bloodspy.shoppinglist.R
 import com.bloodspy.shoppinglist.presentation.viewmodels.MainViewModel
 import com.bloodspy.shoppinglist.presentation.fragments.ShopItemFragment
-import com.bloodspy.shoppinglist.presentation.adapters.ShoppingListAdapter
+import com.bloodspy.shoppinglist.presentation.recyclerViewUtils.adapters.ShoppingListAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {

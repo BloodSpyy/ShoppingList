@@ -1,4 +1,4 @@
-package com.bloodspy.shoppinglist.presentation.adapters
+package com.bloodspy.shoppinglist.presentation.recyclerViewUtils.callbacks
 
 import androidx.recyclerview.widget.DiffUtil
 import com.bloodspy.shoppinglist.domain.entity.ShopItem
