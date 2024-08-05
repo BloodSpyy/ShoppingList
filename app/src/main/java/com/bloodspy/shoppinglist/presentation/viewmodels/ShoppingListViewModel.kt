@@ -7,7 +7,7 @@ import com.bloodspy.shoppinglist.domain.usecases.EditShopItemUseCase
 import com.bloodspy.shoppinglist.domain.usecases.GetShopListUseCase
 import com.bloodspy.shoppinglist.domain.entity.ShopItem
 
-class MainViewModel() : ViewModel() {
+class ShoppingListViewModel() : ViewModel() {
     private val shoppingListRepositoryImpl = ShoppingListRepositoryImpl
 
     private val getShopListUseCase = GetShopListUseCase(shoppingListRepositoryImpl)

@@ -4,21 +4,19 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bloodspy.shoppinglist.R
-import com.bloodspy.shoppinglist.databinding.ActivityMainBinding
-import com.bloodspy.shoppinglist.presentation.viewmodels.MainViewModel
+import com.bloodspy.shoppinglist.databinding.ActivityShoppingListBinding
 import com.bloodspy.shoppinglist.presentation.fragments.ShopItemFragment
 import com.bloodspy.shoppinglist.presentation.recyclerViewUtils.adapters.ShoppingListAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.bloodspy.shoppinglist.presentation.viewmodels.ShoppingListViewModel
 
-class MainActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
-    private lateinit var binding: ActivityMainBinding
+class ShoppingListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
+    private lateinit var binding: ActivityShoppingListBinding
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: ShoppingListViewModel
 
     private lateinit var shoppingListAdapter: ShoppingListAdapter
 
@@ -32,7 +30,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityShoppingListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupViewModel()
@@ -45,7 +43,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
     private fun setupOnClickListeners() {
         binding.buttonAddShopItem.setOnClickListener {
             if(orientation == PORTRAIT_ORIENTATION) {
-                startActivity(ShopItemActivity.newIntentAddItem(this@MainActivity))
+                startActivity(ShopItemActivity.newIntentAddItem(this@ShoppingListActivity))
             } else {
                 launchFragment(ShopItemFragment.newInstanceAddItem())
             }
@@ -90,7 +88,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
             }
             onShopItemClickListener = if(orientation == PORTRAIT_ORIENTATION) {
                 {
-                    startActivity(ShopItemActivity.newIntentEditItem(this@MainActivity, it.id))
+                    startActivity(ShopItemActivity.newIntentEditItem(this@ShoppingListActivity, it.id))
                 }
             } else {
                 {
@@ -102,7 +100,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this)[ShoppingListViewModel::class.java]
     }
 
     private fun setupSwipeListener(recyclerViewShoppingList: RecyclerView) {

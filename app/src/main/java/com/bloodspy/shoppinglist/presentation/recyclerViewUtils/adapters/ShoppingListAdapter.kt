@@ -2,8 +2,12 @@ package com.bloodspy.shoppinglist.presentation.recyclerViewUtils.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
 import com.bloodspy.shoppinglist.R
+import com.bloodspy.shoppinglist.databinding.ShopItemDisabledBinding
+import com.bloodspy.shoppinglist.databinding.ShopItemEnabledBinding
 import com.bloodspy.shoppinglist.domain.entity.ShopItem
 import com.bloodspy.shoppinglist.presentation.recyclerViewUtils.callbacks.ShopItemDiffCallback
 import com.bloodspy.shoppinglist.presentation.recyclerViewUtils.viewholders.ShopItemViewHolder
@@ -28,22 +32,37 @@ class ShoppingListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(
             else -> throw RuntimeException("Not search view type: $viewType")
         }
 
-        val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(
+            LayoutInflater.from(parent.context),
+            layout,
+            parent,
+            false
+        )
 
-        return ShopItemViewHolder(view)
+        return ShopItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
         val shopItem = getItem(position)
 
-        with(holder) {
-            textViewShopItem.text = shopItem.name
-            textViewShopItemCount.text = shopItem.count.toString()
-            itemView.setOnLongClickListener {
+        val binding = holder.binding
+
+        when (binding) {
+            is ShopItemEnabledBinding -> {
+                binding.shopItem = shopItem
+            }
+
+            is ShopItemDisabledBinding -> {
+                binding.shopItem = shopItem
+            }
+        }
+
+        with(binding.root) {
+            setOnLongClickListener {
                 onShopItemLongClickListener?.invoke(shopItem)
                 true
             }
-            itemView.setOnClickListener {
+            setOnClickListener {
                 onShopItemClickListener?.invoke(shopItem)
             }
         }

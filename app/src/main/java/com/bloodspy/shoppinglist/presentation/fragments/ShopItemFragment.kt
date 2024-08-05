@@ -12,20 +12,18 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bloodspy.shoppinglist.R
+import com.bloodspy.shoppinglist.databinding.FragmentShopItemBinding
 import com.bloodspy.shoppinglist.domain.entity.ShopItem
 import com.bloodspy.shoppinglist.presentation.viewmodels.ShopItemViewModel
 import com.google.android.material.textfield.TextInputLayout
 
 class ShopItemFragment() : Fragment() {
-    lateinit var onEndWorkListener: OnEndWorkListener
+    private var _binding: FragmentShopItemBinding? = null
+    private val binding: FragmentShopItemBinding
+        get() = _binding ?: throw RuntimeException("FragmentShopItemBinding is null")
 
-    private lateinit var textInputLayoutName: TextInputLayout
-    private lateinit var textInputLayoutCount: TextInputLayout
 
-    private lateinit var editTextName: EditText
-    private lateinit var editTextCount: EditText
-
-    private lateinit var buttonSaveShopItem: Button
+    private lateinit var onEndWorkListener: OnEndWorkListener
 
     private lateinit var viewModel: ShopItemViewModel
 
@@ -67,7 +65,6 @@ class ShopItemFragment() : Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(LOG_TAG, "onCreate()")
         super.onCreate(savedInstanceState)
 
         parseParams()
@@ -77,16 +74,19 @@ class ShopItemFragment() : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        Log.d(LOG_TAG, "onCreateView()")
-        return inflater.inflate(R.layout.fragment_shop_item, container, false)
+    ): View {
+        _binding = FragmentShopItemBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d(LOG_TAG, "onViewCreated()")
         super.onViewCreated(view, savedInstanceState)
 
-        initViews(view)
         initViewModel()
         observeViewModel()
         setupDoOnTextChanged()
@@ -98,8 +98,9 @@ class ShopItemFragment() : Fragment() {
     }
 
     override fun onDestroyView() {
-        Log.d(LOG_TAG, "onDestroyView()")
         super.onDestroyView()
+
+        _binding = null
     }
 
     interface OnEndWorkListener {
@@ -107,7 +108,7 @@ class ShopItemFragment() : Fragment() {
     }
 
     private fun launchAddMode() {
-        buttonSaveShopItem.setOnClickListener {
+        binding.buttonSaveShopItem.setOnClickListener {
             val name = getShopItemName()
             val count = getShopItemCount()
 
@@ -118,16 +119,18 @@ class ShopItemFragment() : Fragment() {
     private fun launchEditMode() {
         viewModel.loadShopItem(shopItemId)
 
-        viewModel.shopItem.observe(viewLifecycleOwner) {
-            editTextName.setText(it.name)
-            editTextCount.setText(it.count.toString())
-        }
+        with(binding) {
+            viewModel.shopItem.observe(viewLifecycleOwner) {
+                editTextName.setText(it.name)
+                editTextCount.setText(it.count.toString())
+            }
 
-        buttonSaveShopItem.setOnClickListener {
-            val name = getShopItemName()
-            val count = getShopItemCount()
+            buttonSaveShopItem.setOnClickListener {
+                val name = getShopItemName()
+                val count = getShopItemCount()
 
-            viewModel.editShopItem(name, count)
+                viewModel.editShopItem(name, count)
+            }
         }
     }
 
@@ -141,7 +144,7 @@ class ShopItemFragment() : Fragment() {
                 null
             }
 
-            textInputLayoutName.error = errorMessage
+            binding.textInputLayoutName.error = errorMessage
         }
 
         viewModel.errorInputCount.observe(
@@ -153,7 +156,7 @@ class ShopItemFragment() : Fragment() {
                 null
             }
 
-            textInputLayoutCount.error = errorMessage
+            binding.textInputLayoutCount.error = errorMessage
         }
 
         viewModel.shouldCloseScreen.observe(
@@ -164,18 +167,20 @@ class ShopItemFragment() : Fragment() {
     }
 
     private fun setupDoOnTextChanged() {
-        editTextName.doOnTextChanged { text, start, before, count ->
-            viewModel.resetErrorInputName()
-        }
+        with(binding) {
+            editTextName.doOnTextChanged { text, start, before, count ->
+                viewModel.resetErrorInputName()
+            }
 
-        editTextCount.doOnTextChanged { text, start, before, count ->
-            viewModel.resetErrorInputCount()
+            editTextCount.doOnTextChanged { text, start, before, count ->
+                viewModel.resetErrorInputCount()
+            }
         }
     }
 
-    private fun getShopItemName(): String = editTextName.text.toString()
+    private fun getShopItemName(): String = binding.editTextName.text.toString()
 
-    private fun getShopItemCount(): String = editTextCount.text.toString()
+    private fun getShopItemCount(): String = binding.editTextCount.text.toString()
 
 
     private fun initViewModel() {
@@ -203,13 +208,5 @@ class ShopItemFragment() : Fragment() {
 
             shopItemId = requireArguments().getInt(SHOP_ITEM_ID)
         }
-    }
-
-    private fun initViews(view: View) {
-        textInputLayoutName = view.findViewById(R.id.textInputLayoutName)
-        textInputLayoutCount = view.findViewById(R.id.textInputLayoutCount)
-        editTextName = view.findViewById(R.id.editTextName)
-        editTextCount = view.findViewById(R.id.editTextCount)
-        buttonSaveShopItem = view.findViewById(R.id.buttonSaveShopItem)
     }
 }
