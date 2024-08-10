@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bloodspy.shoppinglist.domain.ShopItem
 import com.bloodspy.shoppinglist.domain.ShopItem.Companion.UNDEFINED_ID
-import com.bloodspy.shoppinglist.domain.repository.ShoppingListRepository
+import com.bloodspy.shoppinglist.domain.repository.ShopListRepository
 import java.util.NoSuchElementException
 
-object ShoppingListRepositoryImpl : ShoppingListRepository {
+object ShopListRepositoryImpl : ShopListRepository {
     private val shoppingListLD = MutableLiveData<List<ShopItem>>()
     private val shoppingList = sortedSetOf<ShopItem>({ o1, o2 -> o1.id.compareTo(o2.id) })
 

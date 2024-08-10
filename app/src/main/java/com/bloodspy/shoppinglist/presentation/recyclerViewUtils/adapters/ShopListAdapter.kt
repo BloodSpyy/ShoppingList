@@ -12,7 +12,7 @@ import com.bloodspy.shoppinglist.domain.ShopItem
 import com.bloodspy.shoppinglist.presentation.recyclerViewUtils.callbacks.ShopItemDiffCallback
 import com.bloodspy.shoppinglist.presentation.recyclerViewUtils.viewholders.ShopItemViewHolder
 
-class ShoppingListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(
+class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(
     ShopItemDiffCallback()
 ) {
     var onShopItemLongClickListener: ((ShopItem) -> Unit)? = null

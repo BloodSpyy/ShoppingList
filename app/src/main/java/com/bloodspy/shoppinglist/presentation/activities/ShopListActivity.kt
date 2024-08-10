@@ -10,15 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bloodspy.shoppinglist.R
 import com.bloodspy.shoppinglist.databinding.ActivityShoppingListBinding
 import com.bloodspy.shoppinglist.presentation.fragments.ShopItemFragment
-import com.bloodspy.shoppinglist.presentation.recyclerViewUtils.adapters.ShoppingListAdapter
-import com.bloodspy.shoppinglist.presentation.viewmodels.ShoppingListViewModel
+import com.bloodspy.shoppinglist.presentation.recyclerViewUtils.adapters.ShopListAdapter
+import com.bloodspy.shoppinglist.presentation.viewmodels.ShopListViewModel
 
-class ShoppingListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
+class ShopListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
     private lateinit var binding: ActivityShoppingListBinding
 
-    private lateinit var viewModel: ShoppingListViewModel
+    private lateinit var viewModel: ShopListViewModel
 
-    private lateinit var shoppingListAdapter: ShoppingListAdapter
+    private lateinit var shopListAdapter: ShopListAdapter
 
     private lateinit var orientation: String
 
@@ -43,7 +43,7 @@ class ShoppingListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkList
     private fun setupOnClickListeners() {
         binding.buttonAddShopItem.setOnClickListener {
             if(orientation == PORTRAIT_ORIENTATION) {
-                startActivity(ShopItemActivity.newIntentAddItem(this@ShoppingListActivity))
+                startActivity(ShopItemActivity.newIntentAddItem(this@ShopListActivity))
             } else {
                 launchFragment(ShopItemFragment.newInstanceAddItem())
             }
@@ -68,27 +68,27 @@ class ShoppingListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkList
 
     private fun setupRecyclerView() {
         with(binding.recyclerViewShoppingList) {
-            shoppingListAdapter = ShoppingListAdapter()
-            adapter = shoppingListAdapter
+            shopListAdapter = ShopListAdapter()
+            adapter = shopListAdapter
             recycledViewPool.setMaxRecycledViews(
-                ShoppingListAdapter.SHOP_ITEM_ENABLED_VIEW_TYPE,
-                ShoppingListAdapter.MAX_POOL_SIZE
+                ShopListAdapter.SHOP_ITEM_ENABLED_VIEW_TYPE,
+                ShopListAdapter.MAX_POOL_SIZE
             )
             recycledViewPool.setMaxRecycledViews(
-                ShoppingListAdapter.SHOP_ITEM_DISABLED_VIEW_TYPE,
-                ShoppingListAdapter.MAX_POOL_SIZE
+                ShopListAdapter.SHOP_ITEM_DISABLED_VIEW_TYPE,
+                ShopListAdapter.MAX_POOL_SIZE
             )
 
             setupSwipeListener(this)
         }
 
-        with(shoppingListAdapter) {
+        with(shopListAdapter) {
             onShopItemLongClickListener = {
                 viewModel.changeEnableState(it)
             }
             onShopItemClickListener = if(orientation == PORTRAIT_ORIENTATION) {
                 {
-                    startActivity(ShopItemActivity.newIntentEditItem(this@ShoppingListActivity, it.id))
+                    startActivity(ShopItemActivity.newIntentEditItem(this@ShopListActivity, it.id))
                 }
             } else {
                 {
@@ -100,7 +100,7 @@ class ShoppingListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkList
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProvider(this)[ShoppingListViewModel::class.java]
+        viewModel = ViewModelProvider(this)[ShopListViewModel::class.java]
     }
 
     private fun setupSwipeListener(recyclerViewShoppingList: RecyclerView) {
@@ -115,7 +115,7 @@ class ShoppingListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkList
             ): Boolean = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val shopItem = shoppingListAdapter.currentList[viewHolder.adapterPosition]
+                val shopItem = shopListAdapter.currentList[viewHolder.adapterPosition]
                 viewModel.deleteShopItem(shopItem)
             }
         }
@@ -127,7 +127,7 @@ class ShoppingListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkList
         viewModel.shopList.observe(
             this
         ) {
-            shoppingListAdapter.submitList(it)
+            shopListAdapter.submitList(it)
         }
     }
 

@@ -1,14 +1,14 @@
 package com.bloodspy.shoppinglist.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.bloodspy.shoppinglist.data.ShoppingListRepositoryImpl
+import com.bloodspy.shoppinglist.data.ShopListRepositoryImpl
 import com.bloodspy.shoppinglist.domain.usecases.DeleteShopItemUseCase
 import com.bloodspy.shoppinglist.domain.usecases.EditShopItemUseCase
 import com.bloodspy.shoppinglist.domain.usecases.GetShopListUseCase
 import com.bloodspy.shoppinglist.domain.ShopItem
 
-class ShoppingListViewModel() : ViewModel() {
-    private val shoppingListRepositoryImpl = ShoppingListRepositoryImpl
+class ShopListViewModel() : ViewModel() {
+    private val shoppingListRepositoryImpl = ShopListRepositoryImpl
 
     private val getShopListUseCase = GetShopListUseCase(shoppingListRepositoryImpl)
     private val deleteShopItemUseCase = DeleteShopItemUseCase(shoppingListRepositoryImpl)

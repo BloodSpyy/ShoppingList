@@ -3,7 +3,7 @@ package com.bloodspy.shoppinglist.presentation.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.bloodspy.shoppinglist.data.ShoppingListRepositoryImpl
+import com.bloodspy.shoppinglist.data.ShopListRepositoryImpl
 import com.bloodspy.shoppinglist.domain.usecases.AddShopItemUseCase
 import com.bloodspy.shoppinglist.domain.usecases.EditShopItemUseCase
 import com.bloodspy.shoppinglist.domain.usecases.GetShopItemUseCase
@@ -30,7 +30,7 @@ class ShopItemViewModel : ViewModel() {
     val shouldCloseScreen: LiveData<Unit>
         get() = _shouldCloseScreen
 
-    private val shoppingListRepositoryImpl = ShoppingListRepositoryImpl
+    private val shoppingListRepositoryImpl = ShopListRepositoryImpl
 
     private val editShopItemUseCase = EditShopItemUseCase(shoppingListRepositoryImpl)
     private val addShopItemUseCase = AddShopItemUseCase(shoppingListRepositoryImpl)

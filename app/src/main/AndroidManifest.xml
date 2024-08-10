@@ -16,7 +16,7 @@
             android:name=".presentation.activities.ShopItemActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.activities.ShoppingListActivity"
+            android:name=".presentation.activities.ShopListActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -3,7 +3,7 @@ package com.bloodspy.shoppinglist.domain.repository
 import androidx.lifecycle.LiveData
 import com.bloodspy.shoppinglist.domain.ShopItem
 
-interface ShoppingListRepository {
+interface ShopListRepository {
     fun addShopItem(shopItem: ShopItem)
 
     fun deleteShopItem(shopItem: ShopItem)
