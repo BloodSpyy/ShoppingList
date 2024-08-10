@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.bloodspy.shoppinglist.R
 import com.bloodspy.shoppinglist.databinding.ShopItemDisabledBinding
 import com.bloodspy.shoppinglist.databinding.ShopItemEnabledBinding
-import com.bloodspy.shoppinglist.domain.entity.ShopItem
+import com.bloodspy.shoppinglist.domain.ShopItem
 import com.bloodspy.shoppinglist.presentation.recyclerViewUtils.callbacks.ShopItemDiffCallback
 import com.bloodspy.shoppinglist.presentation.recyclerViewUtils.viewholders.ShopItemViewHolder
 

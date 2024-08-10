@@ -1,4 +1,4 @@
-package com.bloodspy.shoppinglist.domain.entity
+package com.bloodspy.shoppinglist.domain
 
 data class ShopItem(
     val name: String,

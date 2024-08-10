@@ -1,7 +1,7 @@
 package com.bloodspy.shoppinglist.domain.repository
 
 import androidx.lifecycle.LiveData
-import com.bloodspy.shoppinglist.domain.entity.ShopItem
+import com.bloodspy.shoppinglist.domain.ShopItem
 
 interface ShoppingListRepository {
     fun addShopItem(shopItem: ShopItem)

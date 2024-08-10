@@ -2,8 +2,8 @@ package com.bloodspy.shoppinglist.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bloodspy.shoppinglist.domain.entity.ShopItem
-import com.bloodspy.shoppinglist.domain.entity.ShopItem.Companion.UNDEFINED_ID
+import com.bloodspy.shoppinglist.domain.ShopItem
+import com.bloodspy.shoppinglist.domain.ShopItem.Companion.UNDEFINED_ID
 import com.bloodspy.shoppinglist.domain.repository.ShoppingListRepository
 import java.util.NoSuchElementException
 

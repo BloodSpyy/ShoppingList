@@ -6,16 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bloodspy.shoppinglist.R
 import com.bloodspy.shoppinglist.databinding.FragmentShopItemBinding
-import com.bloodspy.shoppinglist.domain.entity.ShopItem
+import com.bloodspy.shoppinglist.domain.ShopItem
 import com.bloodspy.shoppinglist.presentation.viewmodels.ShopItemViewModel
-import com.google.android.material.textfield.TextInputLayout
 
 class ShopItemFragment() : Fragment() {
     private var _binding: FragmentShopItemBinding? = null

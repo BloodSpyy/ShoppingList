@@ -1,7 +1,7 @@
 package com.bloodspy.shoppinglist.presentation.recyclerViewUtils.callbacks
 
 import androidx.recyclerview.widget.DiffUtil
-import com.bloodspy.shoppinglist.domain.entity.ShopItem
+import com.bloodspy.shoppinglist.domain.ShopItem
 
 class ShopItemDiffCallback: DiffUtil.ItemCallback<ShopItem>() {
     override fun areItemsTheSame(oldItem: ShopItem, newItem: ShopItem): Boolean {

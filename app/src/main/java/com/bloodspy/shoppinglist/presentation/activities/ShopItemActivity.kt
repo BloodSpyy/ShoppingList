@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bloodspy.shoppinglist.R
-import com.bloodspy.shoppinglist.domain.entity.ShopItem
+import com.bloodspy.shoppinglist.domain.ShopItem
 import com.bloodspy.shoppinglist.presentation.fragments.ShopItemFragment
 
 class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
