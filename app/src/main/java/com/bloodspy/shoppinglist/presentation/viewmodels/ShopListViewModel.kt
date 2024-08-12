@@ -1,14 +1,17 @@
 package com.bloodspy.shoppinglist.presentation.viewmodels
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.bloodspy.shoppinglist.data.ShopListRepositoryImpl
+import com.bloodspy.shoppinglist.domain.entities.ShopItem
 import com.bloodspy.shoppinglist.domain.usecases.DeleteShopItemUseCase
 import com.bloodspy.shoppinglist.domain.usecases.EditShopItemUseCase
 import com.bloodspy.shoppinglist.domain.usecases.GetShopListUseCase
-import com.bloodspy.shoppinglist.domain.ShopItem
+import kotlinx.coroutines.launch
 
-class ShopListViewModel() : ViewModel() {
-    private val shoppingListRepositoryImpl = ShopListRepositoryImpl
+class ShopListViewModel(application: Application) : AndroidViewModel(application) {
+    private val shoppingListRepositoryImpl = ShopListRepositoryImpl(application)
 
     private val getShopListUseCase = GetShopListUseCase(shoppingListRepositoryImpl)
     private val deleteShopItemUseCase = DeleteShopItemUseCase(shoppingListRepositoryImpl)
@@ -17,12 +20,16 @@ class ShopListViewModel() : ViewModel() {
     val shopList = getShopListUseCase.getShopList()
 
     fun deleteShopItem(shopItem: ShopItem) {
-        deleteShopItemUseCase.deleteShopItem(shopItem)
+        viewModelScope.launch {
+            deleteShopItemUseCase.deleteShopItem(shopItem)
+        }
     }
 
     fun changeEnableState(shopItem: ShopItem) {
-        val newShopItem = shopItem.copy(isEnabled = !shopItem.isEnabled)
+        viewModelScope.launch {
+            val newShopItem = shopItem.copy(isEnabled = !shopItem.isEnabled)
 
-        editShopItemUseCase.editShopItem(newShopItem)
+            editShopItemUseCase.editShopItem(newShopItem)
+        }
     }
 }

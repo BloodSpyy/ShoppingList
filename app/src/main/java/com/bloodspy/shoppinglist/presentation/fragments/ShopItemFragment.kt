@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bloodspy.shoppinglist.R
 import com.bloodspy.shoppinglist.databinding.FragmentShopItemBinding
-import com.bloodspy.shoppinglist.domain.ShopItem
+import com.bloodspy.shoppinglist.domain.entities.ShopItem
 import com.bloodspy.shoppinglist.presentation.viewmodels.ShopItemViewModel
 
 class ShopItemFragment() : Fragment() {

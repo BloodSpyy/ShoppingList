@@ -1,10 +1,10 @@
 package com.bloodspy.shoppinglist.domain.usecases
 
-import com.bloodspy.shoppinglist.domain.ShopItem
-import com.bloodspy.shoppinglist.domain.repository.ShopListRepository
+import com.bloodspy.shoppinglist.domain.entities.ShopItem
+import com.bloodspy.shoppinglist.domain.repositories.ShopListRepository
 
 class DeleteShopItemUseCase(private val shopListRepository: ShopListRepository) {
-    fun deleteShopItem(shopItem: ShopItem) {
+    suspend fun deleteShopItem(shopItem: ShopItem) {
         shopListRepository.deleteShopItem(shopItem)
     }
 }

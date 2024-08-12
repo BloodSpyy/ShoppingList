@@ -1,15 +1,18 @@
 package com.bloodspy.shoppinglist.presentation.viewmodels
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bloodspy.shoppinglist.data.ShopListRepositoryImpl
+import com.bloodspy.shoppinglist.domain.entities.ShopItem
 import com.bloodspy.shoppinglist.domain.usecases.AddShopItemUseCase
 import com.bloodspy.shoppinglist.domain.usecases.EditShopItemUseCase
 import com.bloodspy.shoppinglist.domain.usecases.GetShopItemUseCase
-import com.bloodspy.shoppinglist.domain.ShopItem
+import kotlinx.coroutines.launch
 
-class ShopItemViewModel : ViewModel() {
+class ShopItemViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
         const val SHOP_ITEM_IS_ENABLED = true
     }
@@ -30,7 +33,7 @@ class ShopItemViewModel : ViewModel() {
     val shouldCloseScreen: LiveData<Unit>
         get() = _shouldCloseScreen
 
-    private val shoppingListRepositoryImpl = ShopListRepositoryImpl
+    private val shoppingListRepositoryImpl = ShopListRepositoryImpl(application)
 
     private val editShopItemUseCase = EditShopItemUseCase(shoppingListRepositoryImpl)
     private val addShopItemUseCase = AddShopItemUseCase(shoppingListRepositoryImpl)
@@ -45,12 +48,13 @@ class ShopItemViewModel : ViewModel() {
 
             oldShopItem?.let {
                 val shopItem = it.copy(name = newName, count = newCount)
-                editShopItemUseCase.editShopItem(
-                    shopItem
-                )
+                viewModelScope.launch {
+                    editShopItemUseCase.editShopItem(
+                        shopItem
+                    )
+                    closeScreen()
+                }
             }
-
-            closeScreen()
         }
     }
 
@@ -60,13 +64,17 @@ class ShopItemViewModel : ViewModel() {
 
         if (validateInputData(name, count)) {
             val shopItem = ShopItem(name, count, SHOP_ITEM_IS_ENABLED)
-            addShopItemUseCase.addShopItem(shopItem)
-            closeScreen()
+            viewModelScope.launch {
+                addShopItemUseCase.addShopItem(shopItem)
+                closeScreen()
+            }
         }
     }
 
     fun loadShopItem(shopItemId: Int) {
-        _shopItem.value = getShopItemUseCase.getShopItem(shopItemId)
+        viewModelScope.launch {
+            _shopItem.value = getShopItemUseCase.getShopItem(shopItemId)
+        }
     }
 
     fun resetErrorInputName() {

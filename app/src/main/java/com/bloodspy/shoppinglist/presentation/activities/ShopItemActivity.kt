@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bloodspy.shoppinglist.R
-import com.bloodspy.shoppinglist.domain.ShopItem
+import com.bloodspy.shoppinglist.domain.entities.ShopItem
 import com.bloodspy.shoppinglist.presentation.fragments.ShopItemFragment
+import kotlinx.coroutines.launch
 
 class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
     private var screenMode = UNKNOWN_SCREEN_MODE
@@ -43,6 +45,7 @@ class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener
 
         parseIntent()
 
+        lifecycleScope.launch {  }
         val fragment = when (screenMode) {
             EXTRA_MODE_ADD -> ShopItemFragment.newInstanceAddItem()
             EXTRA_MODE_EDIT -> ShopItemFragment.newInstanceEditItem(shopItemId)
