@@ -45,7 +45,6 @@ class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener
 
         parseIntent()
 
-        lifecycleScope.launch {  }
         val fragment = when (screenMode) {
             EXTRA_MODE_ADD -> ShopItemFragment.newInstanceAddItem()
             EXTRA_MODE_EDIT -> ShopItemFragment.newInstanceEditItem(shopItemId)
