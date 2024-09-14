@@ -9,51 +9,36 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bloodspy.shoppinglist.AppApplication
 import com.bloodspy.shoppinglist.R
 import com.bloodspy.shoppinglist.databinding.FragmentShopItemBinding
 import com.bloodspy.shoppinglist.domain.entities.ShopItem
 import com.bloodspy.shoppinglist.presentation.viewmodels.ShopItemViewModel
+import com.bloodspy.shoppinglist.presentation.viewmodels.ViewModelFactory
+import javax.inject.Inject
 
 class ShopItemFragment() : Fragment() {
+    private lateinit var onEndWorkListener: OnEndWorkListener
+
+    @Inject
+    private lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[ShopItemViewModel::class]
+    }
+
     private var _binding: FragmentShopItemBinding? = null
     private val binding: FragmentShopItemBinding
         get() = _binding ?: throw RuntimeException("FragmentShopItemBinding is null")
 
-
-    private lateinit var onEndWorkListener: OnEndWorkListener
-
-    private lateinit var viewModel: ShopItemViewModel
-
     private var screenMode: String = UNKNOWN_SCREEN_MODE
     private var shopItemId: Int = ShopItem.UNDEFINED_ID
 
-    companion object {
-        private const val SCREEN_MODE = "screen_mode"
-        private const val MODE_ADD = "mode_add"
-        private const val MODE_EDIT = "mode_edit"
-        private const val SHOP_ITEM_ID = "shop_item_id"
-
-        private const val UNKNOWN_SCREEN_MODE = ""
-
-        private const val LOG_TAG = "ShopItemFragment"
-
-        fun newInstanceAddItem(): ShopItemFragment = ShopItemFragment().apply {
-            arguments = Bundle().apply {
-                putString(SCREEN_MODE, MODE_ADD)
-            }
-        }
-
-        fun newInstanceEditItem(shopItemId: Int): ShopItemFragment = ShopItemFragment().apply {
-            arguments = Bundle().apply {
-                putString(SCREEN_MODE, MODE_EDIT)
-                putInt(SHOP_ITEM_ID, shopItemId)
-            }
-        }
-    }
-
     override fun onAttach(context: Context) {
-        Log.d(LOG_TAG, "onAttach()")
+        injectDependency()
+
         super.onAttach(context)
+
         if (context is OnEndWorkListener) {
             onEndWorkListener = context
         } else {
@@ -84,7 +69,6 @@ class ShopItemFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViewModel()
         observeViewModel()
         setupDoOnTextChanged()
 
@@ -102,6 +86,10 @@ class ShopItemFragment() : Fragment() {
 
     interface OnEndWorkListener {
         fun onEndWork()
+    }
+
+    private fun injectDependency() {
+        (requireActivity().application as AppApplication).component.inject(this)
     }
 
     private fun launchAddMode() {
@@ -179,11 +167,6 @@ class ShopItemFragment() : Fragment() {
 
     private fun getShopItemCount(): String = binding.editTextCount.text.toString()
 
-
-    private fun initViewModel() {
-        viewModel = ViewModelProvider(this)[(ShopItemViewModel::class.java)]
-    }
-
     private fun parseParams() {
         val args = requireArguments()
 
@@ -204,6 +187,28 @@ class ShopItemFragment() : Fragment() {
             }
 
             shopItemId = requireArguments().getInt(SHOP_ITEM_ID)
+        }
+    }
+
+    companion object {
+        private const val SCREEN_MODE = "screen_mode"
+        private const val MODE_ADD = "mode_add"
+        private const val MODE_EDIT = "mode_edit"
+        private const val SHOP_ITEM_ID = "shop_item_id"
+
+        private const val UNKNOWN_SCREEN_MODE = ""
+
+        fun newInstanceAddItem(): ShopItemFragment = ShopItemFragment().apply {
+            arguments = Bundle().apply {
+                putString(SCREEN_MODE, MODE_ADD)
+            }
+        }
+
+        fun newInstanceEditItem(shopItemId: Int): ShopItemFragment = ShopItemFragment().apply {
+            arguments = Bundle().apply {
+                putString(SCREEN_MODE, MODE_EDIT)
+                putInt(SHOP_ITEM_ID, shopItemId)
+            }
         }
     }
 }
