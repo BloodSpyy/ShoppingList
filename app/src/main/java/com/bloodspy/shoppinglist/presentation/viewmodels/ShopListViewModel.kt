@@ -1,7 +1,6 @@
 package com.bloodspy.shoppinglist.presentation.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bloodspy.shoppinglist.domain.entities.ShopItem
 import com.bloodspy.shoppinglist.domain.usecases.DeleteShopItemUseCase
@@ -11,11 +10,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ShopListViewModel @Inject constructor(
-    application: Application,
     getShopListUseCase: GetShopListUseCase,
     private val deleteShopItemUseCase: DeleteShopItemUseCase,
     private val editShopItemUseCase: EditShopItemUseCase
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     val shopList = getShopListUseCase.getShopList()
 
