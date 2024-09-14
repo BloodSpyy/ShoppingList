@@ -7,42 +7,56 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.bloodspy.shoppinglist.AppApplication
 import com.bloodspy.shoppinglist.R
 import com.bloodspy.shoppinglist.databinding.ActivityShoppingListBinding
 import com.bloodspy.shoppinglist.presentation.fragments.ShopItemFragment
 import com.bloodspy.shoppinglist.presentation.recyclerViewUtils.adapters.ShopListAdapter
 import com.bloodspy.shoppinglist.presentation.viewmodels.ShopListViewModel
+import com.bloodspy.shoppinglist.presentation.viewmodels.ViewModelFactory
+import javax.inject.Inject
 
 class ShopListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener {
-    private lateinit var binding: ActivityShoppingListBinding
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
-    private lateinit var viewModel: ShopListViewModel
-
-    private lateinit var shopListAdapter: ShopListAdapter
-
-    private lateinit var orientation: String
-
-    companion object {
-        private const val PORTRAIT_ORIENTATION = "portrait"
-        private const val LANDSCAPE_ORIENTATION = "landscape"
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[ShopListViewModel::class.java]
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val binding by lazy {
+        ActivityShoppingListBinding.inflate(layoutInflater)
+    }
 
-        binding = ActivityShoppingListBinding.inflate(layoutInflater)
+    private val orientation by lazy {
+        parseOrientation()
+    }
+
+    private val shopListAdapter = ShopListAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        injectDependency()
+
+        super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        setupViewModel()
         observeViewModel()
-        parseOrientation()
         setupRecyclerView()
         setupOnClickListeners()
     }
 
+    override fun onEndWork() {
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
+    }
+
+    private fun injectDependency() {
+        (application as AppApplication).component.inject(this)
+    }
+
     private fun setupOnClickListeners() {
         binding.buttonAddShopItem.setOnClickListener {
-            if(orientation == PORTRAIT_ORIENTATION) {
+            if (orientation == PORTRAIT_ORIENTATION) {
                 startActivity(ShopItemActivity.newIntentAddItem(this@ShopListActivity))
             } else {
                 launchFragment(ShopItemFragment.newInstanceAddItem())
@@ -50,8 +64,8 @@ class ShopListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener
         }
     }
 
-    private fun parseOrientation() {
-        orientation = if(binding.shopItemContainer == null) {
+    private fun parseOrientation(): String {
+        return if (binding.shopItemContainer == null) {
             PORTRAIT_ORIENTATION
         } else {
             LANDSCAPE_ORIENTATION
@@ -68,7 +82,6 @@ class ShopListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener
 
     private fun setupRecyclerView() {
         with(binding.recyclerViewShoppingList) {
-            shopListAdapter = ShopListAdapter()
             adapter = shopListAdapter
             recycledViewPool.setMaxRecycledViews(
                 ShopListAdapter.SHOP_ITEM_ENABLED_VIEW_TYPE,
@@ -86,21 +99,17 @@ class ShopListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener
             onShopItemLongClickListener = {
                 viewModel.changeEnableState(it)
             }
-            onShopItemClickListener = if(orientation == PORTRAIT_ORIENTATION) {
+            onShopItemClickListener = if (orientation == PORTRAIT_ORIENTATION) {
                 {
                     startActivity(ShopItemActivity.newIntentEditItem(this@ShopListActivity, it.id))
                 }
             } else {
                 {
-                        launchFragment(ShopItemFragment.newInstanceEditItem(it.id))
+                    launchFragment(ShopItemFragment.newInstanceEditItem(it.id))
                 }
             }
 
         }
-    }
-
-    private fun setupViewModel() {
-        viewModel = ViewModelProvider(this)[ShopListViewModel::class.java]
     }
 
     private fun setupSwipeListener(recyclerViewShoppingList: RecyclerView) {
@@ -111,7 +120,7 @@ class ShopListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
+                target: RecyclerView.ViewHolder,
             ): Boolean = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -131,8 +140,8 @@ class ShopListActivity : AppCompatActivity(), ShopItemFragment.OnEndWorkListener
         }
     }
 
-    override fun onEndWork() {
-        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
-        supportFragmentManager.popBackStack()
+    companion object {
+        private const val PORTRAIT_ORIENTATION = "portrait"
+        private const val LANDSCAPE_ORIENTATION = "landscape"
     }
 }
