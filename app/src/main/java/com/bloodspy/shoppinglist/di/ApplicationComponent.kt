@@ -12,7 +12,6 @@ import dagger.Component
 interface ApplicationComponent {
     fun inject(shopListActivity: ShopListActivity)
 
-
     @Component.Factory
     interface ApplicationComponentFactory {
         fun create(@BindsInstance application: Application): ApplicationComponent
