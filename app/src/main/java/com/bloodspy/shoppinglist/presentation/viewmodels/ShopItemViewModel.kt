@@ -5,17 +5,19 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.bloodspy.shoppinglist.data.ShopListRepositoryImpl
 import com.bloodspy.shoppinglist.domain.entities.ShopItem
 import com.bloodspy.shoppinglist.domain.usecases.AddShopItemUseCase
 import com.bloodspy.shoppinglist.domain.usecases.EditShopItemUseCase
 import com.bloodspy.shoppinglist.domain.usecases.GetShopItemUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ShopItemViewModel(application: Application) : AndroidViewModel(application) {
-    companion object {
-        const val SHOP_ITEM_IS_ENABLED = true
-    }
+class ShopItemViewModel @Inject constructor(
+    application: Application,
+    private val editShopItemUseCase: EditShopItemUseCase,
+    private val addShopItemUseCase: AddShopItemUseCase,
+    private val getShopItemUseCase: GetShopItemUseCase,
+) : AndroidViewModel(application) {
 
     private val _errorInputName = MutableLiveData<Boolean>()
     val errorInputName: LiveData<Boolean>
@@ -33,11 +35,6 @@ class ShopItemViewModel(application: Application) : AndroidViewModel(application
     val shouldCloseScreen: LiveData<Unit>
         get() = _shouldCloseScreen
 
-    private val shoppingListRepositoryImpl = ShopListRepositoryImpl(application)
-
-    private val editShopItemUseCase = EditShopItemUseCase(shoppingListRepositoryImpl)
-    private val addShopItemUseCase = AddShopItemUseCase(shoppingListRepositoryImpl)
-    private val getShopItemUseCase = GetShopItemUseCase(shoppingListRepositoryImpl)
 
     fun editShopItem(inputName: String?, inputCount: String?) {
         val newName = parseName(inputName)
@@ -111,5 +108,9 @@ class ShopItemViewModel(application: Application) : AndroidViewModel(application
         }
 
         return validateResult
+    }
+
+    companion object {
+        const val SHOP_ITEM_IS_ENABLED = true
     }
 }
