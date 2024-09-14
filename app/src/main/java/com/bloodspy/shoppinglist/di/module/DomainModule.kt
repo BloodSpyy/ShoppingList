@@ -19,6 +19,7 @@ interface DomainModule {
 
     companion object {
         @Provides
+        @ApplicationScope
         fun provideShopItemDao(application: Application): ShopListDao =
             AppDatabase.getInstance(application).shoppingListDao()
     }
